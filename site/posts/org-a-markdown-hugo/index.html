@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>&#34;Configurar doom-emacs para tranpilar archivos ORG a Markdown y usarlo en Hugo&#34; - Blog</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Hugo por su simpleza y rapidez resulta una opción interesante cuando deseamos tener un blog simple, pero este de forma nativa no soporta ORG, y requerimos usar un parser para esta tarea.  En los siguientes párrafos mostraré una seria de instrucciones para poder configurar nuestro doom-emacs para que cumpla con la tarea de transpilar nuestro ORG a un archivo de tipo Markdown que si pueda interpretar Hugo ox-hugo (emacs)   Página del proyecto: ox-hugo - Org to Hugo exporter  ox-hugo es el modulo que nos ayudara a realizar la tarea de transpilación que requiere Hugo, en doom-emacs es tan fácil como agregar a nuestro ORG el flag de Hugo como sigue: (doom!" />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="&#34;Configurar doom-emacs para tranpilar archivos ORG a Markdown y usarlo en Hugo&#34;" />
+<meta property="og:description" content="Hugo por su simpleza y rapidez resulta una opción interesante cuando deseamos tener un blog simple, pero este de forma nativa no soporta ORG, y requerimos usar un parser para esta tarea.  En los siguientes párrafos mostraré una seria de instrucciones para poder configurar nuestro doom-emacs para que cumpla con la tarea de transpilar nuestro ORG a un archivo de tipo Markdown que si pueda interpretar Hugo ox-hugo (emacs)   Página del proyecto: ox-hugo - Org to Hugo exporter  ox-hugo es el modulo que nos ayudara a realizar la tarea de transpilación que requiere Hugo, en doom-emacs es tan fácil como agregar a nuestro ORG el flag de Hugo como sigue: (doom!" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://example.org/posts/org-a-markdown-hugo/" />
+<meta property="article:published_time" content="2022-03-27T17:03:20-06:00" />
+<meta property="article:modified_time" content="2022-03-27T17:03:20-06:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="&#34;Configurar doom-emacs para tranpilar archivos ORG a Markdown y usarlo en Hugo&#34;"/>
+<meta name="twitter:description" content="Hugo por su simpleza y rapidez resulta una opción interesante cuando deseamos tener un blog simple, pero este de forma nativa no soporta ORG, y requerimos usar un parser para esta tarea.  En los siguientes párrafos mostraré una seria de instrucciones para poder configurar nuestro doom-emacs para que cumpla con la tarea de transpilar nuestro ORG a un archivo de tipo Markdown que si pueda interpretar Hugo ox-hugo (emacs)   Página del proyecto: ox-hugo - Org to Hugo exporter  ox-hugo es el modulo que nos ayudara a realizar la tarea de transpilación que requiere Hugo, en doom-emacs es tan fácil como agregar a nuestro ORG el flag de Hugo como sigue: (doom!"/>
+
+	
+        <link href="http://example.org/css/fonts.b685ac6f654695232de7b82a9143a46f9e049c8e3af3a21d9737b01f4be211d1.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="http://example.org/css/main.40ca3a860425083862b7ebd55447caec5c4384573f0cb098b8d06a91e8dace2e.css" />
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="http://example.org/">Blog</a>
+	</div>
+	<nav>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">&#34;Configurar doom-emacs para tranpilar archivos ORG a Markdown y usarlo en Hugo&#34;</h1>
+			<div class="meta">Posted on Mar 27, 2022</div>
+		</div>
+		
+
+		<section class="body">
+			
+<p>
+Hugo por su simpleza y rapidez resulta una opción interesante cuando deseamos tener un blog simple, pero este de forma nativa no soporta ORG, y requerimos usar un parser para esta tarea.
+</p>
+<p>
+En los siguientes párrafos mostraré una seria de instrucciones para poder configurar nuestro doom-emacs para que cumpla con la tarea de transpilar nuestro ORG a un archivo de tipo Markdown que si pueda interpretar Hugo
+</p>
+<h2 id="headline-1">
+ox-hugo (emacs)
+</h2>
+<p>
+Página del proyecto: <a href="https://ox-hugo.scripter.co/">ox-hugo - Org to Hugo exporter</a>
+</p>
+<p>
+ox-hugo es el modulo que nos ayudara a realizar la tarea de transpilación que requiere Hugo, en doom-emacs es tan fácil como agregar a nuestro ORG el flag de Hugo como sigue:
+</p>
+<div class="src src-lisp">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-lisp" data-lang="lisp">(doom!
+ <span style="color:#e6db74">:lang</span>
+ (org +hugo))</code></pre></div>
+</div>
+<p>
+Posterior a esto hacemos el tipico doom sync, y doom/reload
+</p>
+<p>
+Lo anterior nos habilitara la posibilidad de usar ox-hugo sin necesidad de tocar mucho mas.
+</p>
+<p>
+Ahora requerimos indicarle a ox-hugo donde esta nuestro proyecto de hugo, en la documentación nos brindan 2 opciones <a href="https://ox-hugo.scripter.co/#before-you-export">Link documentación</a>
+</p>
+<p>
+En mi caso encontré que la opción de agregar a mi archivo la ruta del proyecto es mas cómodo
+</p>
+<div class="src src-org">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-org" data-lang="org"><span style="color:#75715e">#+title</span><span style="color:#75715e">: &#34;Usar org mode en hugo&#34;</span>
+<span style="color:#75715e">#+date</span><span style="color:#75715e">: 2022-03-27T17:03:20-06:00</span>
+<span style="color:#75715e">#+author</span><span style="color:#75715e">: &#34;Daniel Menchaca Luna&#34;</span>
+<span style="color:#75715e">#+draft</span><span style="color:#75715e">: false</span>
+<span style="color:#75715e">#+hugo_base_dir</span><span style="color:#75715e">: ../..</span></code></pre></div>
+</div>
+<p>
+Nota: este es el esquema que utilizo para que Hugo sepa el titulo y la fecha de mi post
+</p>
+<p>
+Debemos destacar que ox-hugo considera la siguiente ruta para el markdown resultante
+</p>
+<div class="src src-text">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">/proyecto-de-hugo/content/posts/</code></pre></div>
+</div>
+<p>
+De tal forma que nuestro archivo ORG es recomendable colocarlo dentro de la carpeta posts, posterior a esto teniendo el archivo ORG en la ventana ejecutamos el siguiente comando de doom-emacs
+</p>
+<div class="src src-text">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">SPC m e H H</code></pre></div>
+</div>
+<p>
+Adicional existe una opción de ox-hugo que transpila cada vez que detecta un cambio en nuestro archivo ORG; pero este lo encontré un poco molesto dado que emacs te tiende a preguntar si estas seguro de editar el buffer temporal que te genera ox-hugo cuando realiza la transpilación:
+</p>
+<div class="src src-text">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">M-x org-mode-auto-export-mode</code></pre></div>
+</div>
+<h2 id="headline-2">
+Algunos sitios interesantes:
+</h2>
+<p>
+https://willschenk.com/articles/2019/using_org_mode_in_hugo/
+</p>
+<p>
+https://lucidmanager.org/productivity/create-websites-with-org-mode-and-hugo/
+</p>
+
+		</section>
+
+		<div class="post-tags">
+			
+			
+			
+		</div>
+	</article>
+</main>
+<footer>
+  <div style="display:flex"></div>
+  <div class="footer-info">
+    2022  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+</div>
+    </body>
+</html>
