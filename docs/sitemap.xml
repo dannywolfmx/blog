@@ -3,26 +3,26 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://example.org/posts/org-a-markdown-hugo/</loc>
+    <loc>https://dannywolfmx.github.io/blog/posts/org-a-markdown-hugo/</loc>
     <lastmod>2022-03-27T17:03:20-06:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/</loc>
+    <loc>https://dannywolfmx.github.io/blog/</loc>
     <lastmod>2022-03-27T17:03:20-06:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/posts/</loc>
+    <loc>https://dannywolfmx.github.io/blog/posts/</loc>
     <lastmod>2022-03-27T17:03:20-06:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/categories/</loc>
+    <loc>https://dannywolfmx.github.io/blog/categories/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/tags/</loc>
+    <loc>https://dannywolfmx.github.io/blog/tags/</loc>
   </url>
   
 </urlset>
