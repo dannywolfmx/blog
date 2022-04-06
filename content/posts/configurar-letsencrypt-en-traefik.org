@@ -1,0 +1,172 @@
+#+title: "Configurar Let's Encrypt en traefik"
+#+date: 2022-04-03T00:00:20-06:00
+#+author: "Daniel Menchaca Luna"
+#+draft: true
+#+hugo_base_dir: ../..
+
+* Resumen
+
+En el siguiente articulo veremos como configurar SSL en traefik usando Let's Encrypt que aunque es fácil este requiere un par de pasos para su puesta en marcha.
+
+
+* traefik.yml
+#+begin_src yaml
+api:
+  #Habilitar el dashboard de traefik
+  dashboard: true
+  debug: true
+entryPoints:
+  #Los entry points para http (80) y https (443)
+  http:
+    address: ":80"
+  https:
+    address: ":443"
+serversTransport:
+  insecureSkipVerify: true
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+  file:
+    filename: /config.yml
+certificatesResolvers:
+  #nombre de nuestro resolver, este puede ser el nombre que quieras, por comodidas le he puestro el siguiente
+  letsencrypt:
+    #los datos ligados a nuestro
+    acme:
+      email: nuestro_email@nuestro_dominio.com
+      storage: acme.json
+      dnsChallenge:
+        provider: linodev4
+        resolvers:
+          - "1.1.1.1:53"
+          - "1.0.0.1:53"
+#+end_src
+
+Como notaremos tenemos indicado la existencia de un archivo llamado *acme.json*, es importante crearlo y que este tenga permiso 600
+
+#+begin_src bash
+touch acme.json
+chmod 600 acme.json
+#+end_src
+
+Un punto importante es identificar el *provider* al cual Let's Encrypt se conectará, en la documentación podemos encontrar la lista de proveedores [[https://doc.traefik.io/traefik/https/acme/#providers][Let's Encrypt - Traefik]]. Lamentablemente traefik no es del todo claro cuando hemos seleccionado adecuadamente nuestro proveedor, y no nos arrojara un error que nos brindé luz sobre cual es el problema. En mi caso en particular que estoy utilizando linode, traefik cuanta con 2 formas de configurar una cuenta de linode, y por desgracia demoré en darme cuenta que la mía debía ser *linodev4*
+
+Como notaremos en la documentación, traefik por debajo utiliza LEGO un cliente para interactuar con Let's Encrypt y que nos será de utilidad para saber como configurar nuestro cliente en base al provider.
+
+** Ejemplo de Linode V4
+
+[[https://go-acme.github.io/lego/dns/linode/][Linode (v4) :: Let’s Encrypt client and ACME library written in Go.]]
+
+En la documentación de Lego encontraremos algo como lo siguiente:
+
+#+begin_src bash
+LINODE_TOKEN=xxxxx \
+lego --email myemail@example.com --dns linode --domains my.example.org run
+#+end_src
+
+Pero debido a que traefik es quien se encargará de hacer la interacción con Lego debemos ajustar el anterior comando para que traefik sea quien haga de forma interna este comando.
+
+- LINODE_TOKEN: este token lo debemos de conseguir desde nuestro panel de control dentro de linode  [[https://cloud.linode.com/profile/tokens][Linode Manager]], dentro del panel generaremos un nuevo *Personal Access Token* y le daremos únicamente permisos para poder leer y escribir dominios. (Mas adelante veremos donde colocar este token).
+- email: este ya lo hemos indicado en nuestro *traefik.yml* en el apartado de email de acme, por lo que no es necesario modificar nada.
+- dns: este ya lo hemos indicado en los parametros de nuestro dnsChallenge en el archivo *traefik.yml*.
+
+En caso de que se lo pregunten, es correcto los resolvers son las IPs publicas de cloudflare para sus DNS, pero no se preocupen dado que son validos como remplazo a los de linode.
+
+* Usuario y contraseña para el middleware de traefik
+** htpasswd
+Ejemplo de cadena generado para el nombre de usuario *user* y la contraseña *password*
+#+begin_src bash
+echo $(htpasswd -nb user password) | sed -e s/\\$/\\$\\$/g
+#+end_src
+
+Nota: es muy importante utilizar la sed como se muestra en el apartado anterior
+
+Nos genera la cadena:
+
+#+begin_src bash
+user:$$apr1$$ZCdpObME$$JUZ7NMS93R/k54WEYpek80
+#+end_src
+
+*
+
+* Configuración de nuestro docker de ejemplo
+
+** Creación de la red de docker
+Para tener un poco mas de orden en como se comunican nuestros contenedores, utilizaremos la capacidad de crear redes que tiene docker
+
+Vamos a crear una red llamada *proxy*
+#+begin_src bash
+docker network create proxy
+#+end_src
+
+** docker-compose.yml
+Para esta prueba presentaremos un ejemplo sencillo como el siguiente docker-compose.yml
+
+#+begin_src yaml
+version: '3.4'
+
+services:
+  traefik:
+    container_name: traefik
+    restart: unless-stopped
+    image: traefik:v2.1
+    networks:
+      - proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.yml:/traefik.yml:ro
+      - ./traefik/config.yml:/config.yml:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`dashboard.localhost`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=user:$$apr1$$ZCdpObME$$JUZ7NMS93R/k54WEYpek80"
+
+
+networks:
+  proxy:
+    external: true
+#+end_src
+
+*** Explicación de cada punto del docker file
+El nombre con el cual identificaremos a nuestro contenedor, pedir a docker que se reinicie si detecta que de ha caído, la imagen de nuestro traefik oficial
+#+begin_src yaml
+    container_name: traefik
+    restart: unless-stopped
+    image: traefik:v2.1
+#+end_src
+
+El nombre de las redes a las cual puede acceder este contenedor, y los puestos que van a estar mapeados con nuestro host (80 http, y 443 https)
+#+begin_src yaml
+    networks:
+      - proxy
+    ports:
+      - "80:80"
+      - "443:443"
+#+end_src
+
+Ligar el docker.sock para que traefik pueda estar al pendiente de los contenedores que administrara como proxy. El apartado *:ro* quiere decir que traefik solo tendrá capacidad de leer el archivo sin editarlo
+
+Los siguientes 2 archivos, son los archivos de configuración de traefik, que en el caso de *config.yml* no lo utilizaremos, pero lo dejaremos para futuras configuraciones
+#+begin_src yaml
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/traefik.yml:/traefik.yml:ro
+      - ./traefik/config.yml:/config.yml:ro
+#+end_src
+
+
+#+begin_src yaml
+    labels:
+      # Habilitar traefik en este contenedor para que pueda ser
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`dashboard.localhost`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.middlewares=auth"
+      - "traefik.http.middlewares.auth.basicauth.users=user:$$apr1$$ZCdpObME$$JUZ7NMS93R/k54WEYpek80"
+#+end_src
