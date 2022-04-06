@@ -1,7 +1,7 @@
 #+title: "Configurar Let's Encrypt en traefik"
 #+date: 2022-04-03T00:00:20-06:00
 #+author: "Daniel Menchaca Luna"
-#+draft: true
+#+draft: false
 #+hugo_base_dir: ../..
 
 * Resumen
@@ -9,7 +9,7 @@
 En el siguiente articulo veremos como configurar SSL en traefik usando Let's Encrypt que aunque es fácil este requiere un par de pasos para su puesta en marcha.
 
 
-* traefik.yml
+* Configuración de traefik.yml
 #+begin_src yaml
 api:
   #Habilitar el dashboard de traefik
@@ -73,6 +73,214 @@ Pero debido a que traefik es quien se encargará de hacer la interacción con Le
 
 En caso de que se lo pregunten, es correcto los resolvers son las IPs publicas de cloudflare para sus DNS, pero no se preocupen dado que son validos como remplazo a los de linode.
 
+* Configuración del contenedor de traefik usando docker-compose
+#+begin_src
+version: '3.4'
+
+services:
+  traefik:
+    container_name: traefik
+    restart: unless-stopped
+    image: traefik:v2.1
+    networks:
+      - proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - LINODE_TOKEN=AQUI PONDREMOS EL TOKEN QUE GENERAMOS ANTES
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data/traefik.yml:/traefik.yml:ro
+      - ./data/config.yml:/config.yml:ro
+      - ./data/acme.json:/acme.json
+    labels:
+      - "traefik.enable=true"
+
+
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.example.com`)"
+
+      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+
+      - "traefik.http.routers.traefik.middlewares=https-redirect"
+
+      - "traefik.http.routers.traefik-secure.entrypoints=https"
+      - "traefik.http.routers.traefik-secure.rule=Host(`traefik.example.fun`)"
+
+      #user password
+      - "traefik.http.middlewares.auth.basicauth.users=user:$$apr1$$ZCdpObME$$JUZ7NMS93R/k54WEYpek80"
+      - "traefik.http.routers.traefik-secure.middlewares=auth"
+
+      - "traefik.http.routers.traefik-secure.tls=true"
+      - "traefik.http.routers.traefik-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=example.com"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.example.com"
+
+      - "traefik.http.routers.traefik-secure.service=api@internal"
+
+
+networks:
+  proxy:
+    external: true
+#+end_src
+
+** Volúmenes
+Para entender los volúmenes de mejor forma este es mi estructura de archivos para este contenedor:
+#+begin_src bash
++ docker-compose.yml
+- data
+    | - acme.json
+    | - config.yml //este no lo utilizaremos en este tutorial pero puedes crearlo para futuros usos
+    | - traefik.yml
+#+end_src
+
+Como tal todos los volúmenes serán de tipo read-only *ro* menos el de acme.json debido a que traefik escribirá y leerá de este archivo para almacenar la información generada por Lego.
+
+** Network
+
+Definimos nuestra network llamada *proxy* en el docker-compose. No es necesario que se llame *proxy* puede ponerle el nombre que consideres mejor para tu proyecto
+#+begin_src
+services:
+  traefik:
+    networks:
+      - proxy
+#+end_src
+
+Y de igual forma dentro de nuestro servicio traefik indicamos las redes a la cual podrá estar conectado nuestro traefik, en este caso solo será a *proxy*
+
+#+begin_src
+networks:
+  - proxy
+#+end_src
+
+Creación de nuestra red llamada *proxy* en nuestra shell
+
+#+begin_src bash
+docker network create proxy
+#+end_src
+
+** LINODE_TOKEN
+
+Este apartado variará dependiendo de nuestro proveedor, por lo que vale la pena consultemos en la documentación [[https://doc.traefik.io/traefik/https/acme/][Let's Encrypt - Traefik]] y en prestar atención a la columna *Enviroment Variables* que en mi caso solo requiere la LINODE_TOKEN, y por ejemplo las de cloudflare son CF_API_EMAIL, CF_API_KEY
+
+#+begin_src
+services:
+  traefik:
+    environment:
+      - LINODE_TOKEN=AQUI PONDREMOS EL TOKEN QUE GENERAMOS ANTES
+#+end_src
+
+** Ports
+
+Hacemos un mapeo de nuestros puertos 80 y 443 para que sean utilizados por los protocolos http y https respectivamente
+
+#+begin_src
+    ports:
+      - "80:80"
+      - "443:443"
+#+end_src
+
+** Labels
+*** traefik.enable=true
+Le indicamos a traefik que este contenedor hará uso de traefik.
+
+¿Cual es el motivo de que traefik utilice traefik? esto es debido a que como tal quien hara uso de traefik es realmente el dashboard de traefik, el cual hemos activado con motivo de tener una mejor visualización de si nuestros servicios están corriendo de buena forma.
+
+*** traefik.http.middleware
+**** https-redirect.redirectscheme.scheme=https
+Le pedimos a traefik que haga un redirect de las request al esquema https
+**** sslheader.headers.customrequestheaders.X-Forwarded-Proto=https
+CustomRequestHeaders revela una lista de opciones para aplicar a una request, en este caso agregaremos la X-Forwarded-Proto, este nos ayudará a identificar entre http y https  [[https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto][X-Forwarded-Proto - HTTP | MDN]]
+**** auth.basicauth.users=user:$$apr1$$ZCdpObME$$JUZ7NMS93R/k54WEYpek80
+Traefik nos brinda mecanismos para solicitar un usuario y contraseña utilizando la api nativas de los navegadores, y este nos será útil para tener un control de acceso al dashboard de traefik,
+
+Lo siguiente es el equivalente a tener como usuario *user* y tener como contraseña *password*
+#+begin_src bash
+user:$$apr1$$ZCdpObME$$JUZ7NMS93R/k54WEYpek80
+#+end_src
+
+Para generar un sistema de usuario contraseña para traefik requerimos utilizar el programa htpasswd del proyecto apache. Una vez instalado en nuestro PC podemos generar nuestro usuario y contraseña:
+
+#+begin_src bash
+echo $(htpasswd -nb user password) | sed -e s/\\$/\\$\\$/g
+#+end_src
+
+
+sustituimos el *user* y *password* por el nombre que consideremos bueno
+
+Nota: es muy importante utilizar la sed como se muestra en el apartado anterior
+
+Es importante indicar que esta cadena es casi random su resultado, por lo que no esperes conseguir el mismo resultado que yo
+
+Ahora el resultado lo colocamos en nuestro contenedor y listo.
+
+Nota: Recomendaría considerar colocar este dato en una variable de entorno
+
+*** traefik.http.routers
+**** traefik
+En este caso podemos hacer referencia a nuestro propio contenedor utilizando su propio indicado en el *container_name* de nuestro docker-compose.
+
+***** entryPoints
+Este lo especificamos previamente en nuestro archivo *traefik.yml* y como se indica sera para atender las peticiones del puerto 80
+
+***** rule
+¿Que Host o Path atenderá este contenedor?, en este caso el dashboard sera desplegado en la pagina traefik.example.com, el cual debemos sustituir por uno que pertenezca a nuestro dominio.
+
+
+#+begin_src yaml
+    labels:
+      - "traefik.enable=true"
+
+
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.example.com`)"
+
+      - "traefik.http.middlewares.https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+
+      - "traefik.http.routers.traefik.middlewares=https-redirect"
+
+      - "traefik.http.routers.traefik-secure.entrypoints=https"
+      - "traefik.http.routers.traefik-secure.rule=Host(`traefik.example.fun`)"
+
+      #user password
+      - "traefik.http.middlewares.auth.basicauth.users=user:$$apr1$$ZCdpObME$$JUZ7NMS93R/k54WEYpek80"
+      - "traefik.http.routers.traefik-secure.middlewares=auth"
+
+      - "traefik.http.routers.traefik-secure.tls=true"
+      - "traefik.http.routers.traefik-secure.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=example.com"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.example.com"
+
+      - "traefik.http.routers.traefik-secure.service=api@internal"
+#+end_src
+
+***** middlewares
+Asignamos el middleware *https-redirect* que declaramos con anterioridad, este nos ayudara a redirigir las peticiones http al https
+**** traefik-secure
+Con traefik podemos colocar el nombre de servicio que queramos en nuestro contenedor, no es necesario que sea el mismo que el *container_name* y utilizaremos esta característica para crear un nuevo servicio que administrara los entrypoints de tipo https.
+
+Algunos puntos son similares a los http por lo que omitiré su explicación
+
+***** middlewares
+Agregamos el middleware auth a nuestro traefik seguro con motivo de que se le solicite el usuario y contraseña a los usuarios que quieran acceder al dashboard
+
+***** tls
+Por ultimo indicamos con *true* que deseamos utilizar tls para esta conexión.
+
+****** certresolver
+Es el nombre que indicamos en nuestro archivo *traefik.yml* en mi caso para identificarlo de mejor forma le llamé letsencrypt, pero repito puedes llamarle como gustes
+****** domains[0].main
+    Este sera nuestro dominio principal del cual también indicaremos los sub-dominios
+****** domains[0].sans
+    Los sub-dominios que deseamos incluir ssl, en mi caso deseo que todos los sub-dominios tengan ssl así que podemos usar el * como comodín
+***** service
+utilizaremos el servicio api declarado en *traefik.yml*
+
+
+
 * Usuario y contraseña para el middleware de traefik
 ** htpasswd
 Ejemplo de cadena generado para el nombre de usuario *user* y la contraseña *password*
@@ -96,9 +304,6 @@ user:$$apr1$$ZCdpObME$$JUZ7NMS93R/k54WEYpek80
 Para tener un poco mas de orden en como se comunican nuestros contenedores, utilizaremos la capacidad de crear redes que tiene docker
 
 Vamos a crear una red llamada *proxy*
-#+begin_src bash
-docker network create proxy
-#+end_src
 
 ** docker-compose.yml
 Para esta prueba presentaremos un ejemplo sencillo como el siguiente docker-compose.yml
