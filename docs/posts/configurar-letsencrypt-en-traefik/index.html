@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>&#34;Configurar Let&#39;s Encrypt en traefik&#34; - Blog</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Resumen   En el siguiente articulo veremos como configurar SSL en traefik usando Let&#39;s Encrypt que aunque es fácil este requiere un par de pasos para su puesta en marcha.  Debido a que es una configuración que requiere varios pasos es posible que cometiera algun error, de ser el caso agradeceria me lo reportaran a mi twitter https://twitter.com/dannywolfmx/ Configuración de traefik.yml  api: #Habilitar el dashboard de traefik dashboard: true debug: true entryPoints: #Los entry points para http (80) y https (443) http: address: &#34;:80&#34; https: address: &#34;:443&#34; serversTransport: insecureSkipVerify: true providers: docker: endpoint: &#34;unix:///var/run/docker." />
+	<meta property="og:image" content=""/>
+	<meta property="og:title" content="&#34;Configurar Let&#39;s Encrypt en traefik&#34;" />
+<meta property="og:description" content="Resumen   En el siguiente articulo veremos como configurar SSL en traefik usando Let&#39;s Encrypt que aunque es fácil este requiere un par de pasos para su puesta en marcha.  Debido a que es una configuración que requiere varios pasos es posible que cometiera algun error, de ser el caso agradeceria me lo reportaran a mi twitter https://twitter.com/dannywolfmx/ Configuración de traefik.yml  api: #Habilitar el dashboard de traefik dashboard: true debug: true entryPoints: #Los entry points para http (80) y https (443) http: address: &#34;:80&#34; https: address: &#34;:443&#34; serversTransport: insecureSkipVerify: true providers: docker: endpoint: &#34;unix:///var/run/docker." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.enne.fun/posts/configurar-letsencrypt-en-traefik/" />
+<meta property="article:published_time" content="2022-04-03T00:00:20-06:00" />
+<meta property="article:modified_time" content="2022-04-03T00:00:20-06:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="&#34;Configurar Let&#39;s Encrypt en traefik&#34;"/>
+<meta name="twitter:description" content="Resumen   En el siguiente articulo veremos como configurar SSL en traefik usando Let&#39;s Encrypt que aunque es fácil este requiere un par de pasos para su puesta en marcha.  Debido a que es una configuración que requiere varios pasos es posible que cometiera algun error, de ser el caso agradeceria me lo reportaran a mi twitter https://twitter.com/dannywolfmx/ Configuración de traefik.yml  api: #Habilitar el dashboard de traefik dashboard: true debug: true entryPoints: #Los entry points para http (80) y https (443) http: address: &#34;:80&#34; https: address: &#34;:443&#34; serversTransport: insecureSkipVerify: true providers: docker: endpoint: &#34;unix:///var/run/docker."/>
+
+	
+        <link href="https://blog.enne.fun/css/fonts.b685ac6f654695232de7b82a9143a46f9e049c8e3af3a21d9737b01f4be211d1.css" rel="stylesheet">
+	
+
+	
+	<link rel="stylesheet" type="text/css" media="screen" href="https://blog.enne.fun/css/main.40ca3a860425083862b7ebd55447caec5c4384573f0cb098b8d06a91e8dace2e.css" />
+	
+	
+</head>
+<body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="https://blog.enne.fun">Blog</a>
+	</div>
+	<nav>
+		
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">&#34;Configurar Let&#39;s Encrypt en traefik&#34;</h1>
+			<div class="meta">Posted on Apr 3, 2022</div>
+		</div>
+		
+
+		<section class="body">
+			
+<h2 id="headline-1">
+Resumen
+</h2>
+<p>
+En el siguiente articulo veremos como configurar SSL en traefik usando Let&#39;s Encrypt que aunque es fácil este requiere un par de pasos para su puesta en marcha.
+</p>
+<p>
+Debido a que es una configuración que requiere varios pasos es posible que cometiera algun error, de ser el caso agradeceria me lo reportaran a mi twitter  <a href="https://twitter.com/dannywolfmx/">https://twitter.com/dannywolfmx/</a>
+</p>
+<h2 id="headline-2">
+Configuración de traefik.yml
+</h2>
+<div class="src src-yaml">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">api</span>:
+  <span style="color:#75715e">#Habilitar el dashboard de traefik</span>
+  <span style="color:#66d9ef">dashboard</span>: <span style="color:#66d9ef">true</span>
+  <span style="color:#66d9ef">debug</span>: <span style="color:#66d9ef">true</span>
+<span style="color:#66d9ef">entryPoints</span>:
+  <span style="color:#75715e">#Los entry points para http (80) y https (443)</span>
+  <span style="color:#66d9ef">http</span>:
+    <span style="color:#66d9ef">address</span>: <span style="color:#e6db74">&#34;:80&#34;</span>
+  <span style="color:#66d9ef">https</span>:
+    <span style="color:#66d9ef">address</span>: <span style="color:#e6db74">&#34;:443&#34;</span>
+<span style="color:#66d9ef">serversTransport</span>:
+  <span style="color:#66d9ef">insecureSkipVerify</span>: <span style="color:#66d9ef">true</span>
+<span style="color:#66d9ef">providers</span>:
+  <span style="color:#66d9ef">docker</span>:
+    <span style="color:#66d9ef">endpoint</span>: <span style="color:#e6db74">&#34;unix:///var/run/docker.sock&#34;</span>
+    <span style="color:#66d9ef">exposedByDefault</span>: <span style="color:#66d9ef">false</span>
+  <span style="color:#66d9ef">file</span>:
+    <span style="color:#66d9ef">filename</span>: /config.yml
+<span style="color:#66d9ef">certificatesResolvers</span>:
+  <span style="color:#75715e">#nombre de nuestro resolver, este puede ser el nombre que quieras, por comodidas le he puestro el siguiente</span>
+  <span style="color:#66d9ef">letsencrypt</span>:
+    <span style="color:#75715e">#los datos ligados a nuestro</span>
+    <span style="color:#66d9ef">acme</span>:
+      <span style="color:#66d9ef">email</span>: nuestro_email@nuestro_dominio.com
+      <span style="color:#66d9ef">storage</span>: acme.json
+      <span style="color:#66d9ef">dnsChallenge</span>:
+        <span style="color:#66d9ef">provider</span>: linodev4
+        <span style="color:#66d9ef">resolvers</span>:
+          - <span style="color:#e6db74">&#34;1.1.1.1:53&#34;</span>
+          - <span style="color:#e6db74">&#34;1.0.0.1:53&#34;</span></code></pre></div>
+</div>
+<p>
+Como notaremos tenemos indicado la existencia de un archivo llamado <strong>acme.json</strong>, es importante crearlo y que este tenga permiso 600
+</p>
+<div class="src src-bash">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">touch acme.json
+chmod <span style="color:#ae81ff">600</span> acme.json</code></pre></div>
+</div>
+<p>
+Un punto importante es identificar el <strong>provider</strong> al cual Let&#39;s Encrypt se conectará, en la documentación podemos encontrar la lista de proveedores <a href="https://doc.traefik.io/traefik/https/acme/#providers">Let&#39;s Encrypt - Traefik</a>. Lamentablemente traefik no es del todo claro cuando hemos seleccionado adecuadamente nuestro proveedor, y no nos arrojara un error que nos brindé luz sobre cual es el problema. En mi caso en particular que estoy utilizando linode, traefik cuanta con 2 formas de configurar una cuenta de linode, y por desgracia demoré en darme cuenta que la mía debía ser <strong>linodev4</strong>
+</p>
+<p>
+Como notaremos en la documentación, traefik por debajo utiliza LEGO un cliente para interactuar con Let&#39;s Encrypt y que nos será de utilidad para saber como configurar nuestro cliente en base al provider.
+</p>
+<h3 id="headline-3">
+Ejemplo de Linode V4
+</h3>
+<p>
+<a href="https://go-acme.github.io/lego/dns/linode/">Linode (v4) :: Let’s Encrypt client and ACME library written in Go.</a>
+</p>
+<p>
+En la documentación de Lego encontraremos algo como lo siguiente:
+</p>
+<div class="src src-bash">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">LINODE_TOKEN<span style="color:#f92672">=</span>xxxxx <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>lego --email myemail@example.com --dns linode --domains my.example.org run</code></pre></div>
+</div>
+<p>
+Pero debido a que traefik es quien se encargará de hacer la interacción con Lego debemos ajustar el anterior comando para que traefik sea quien haga de forma interna este comando.
+</p>
+<p>
+<strong>LINODE_TOKEN:</strong> este token lo debemos de conseguir desde nuestro panel de control dentro de linode  <a href="https://cloud.linode.com/profile/tokens">Linode Manager</a>, dentro del panel generaremos un nuevo <strong>Personal Access Token</strong> y le daremos únicamente permisos para poder leer y escribir dominios. (Mas adelante veremos donde colocar este token).
+</p>
+<p>
+<strong>email:</strong> este ya lo hemos indicado en nuestro <strong>traefik.yml</strong> en el apartado de email de acme, por lo que no es necesario modificar nada.
+</p>
+<p>
+<strong>dns:</strong> este ya lo hemos indicado en los parametros de nuestro dnsChallenge en el archivo <strong>traefik.yml</strong>.
+</p>
+<p>
+En caso de que se lo pregunten, es correcto los resolvers son las IPs publicas de cloudflare para sus DNS, pero no se preocupen dado que son validos como remplazo a los de linode.
+</p>
+<h2 id="headline-4">
+Configuración del contenedor de traefik usando docker-compose
+</h2>
+<div class="src src-yaml">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">version</span>: <span style="color:#e6db74">&#39;3.4&#39;</span>
+
+<span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">traefik</span>:
+    <span style="color:#66d9ef">container_name</span>: traefik
+    <span style="color:#66d9ef">restart</span>: unless-stopped
+    <span style="color:#66d9ef">image</span>: traefik:v2<span style="color:#ae81ff">.1</span>
+    <span style="color:#66d9ef">networks</span>:
+      - proxy
+    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#e6db74">&#34;80:80&#34;</span>
+      - <span style="color:#e6db74">&#34;443:443&#34;</span>
+    <span style="color:#66d9ef">environment</span>:
+      - LINODE_TOKEN=AQUI PONDREMOS EL TOKEN QUE GENERAMOS ANTES
+    <span style="color:#66d9ef">volumes</span>:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./data/traefik.yml:/traefik.yml:ro
+      - ./data/config.yml:/config.yml:ro
+      - ./data/acme.json:/acme.json
+    <span style="color:#66d9ef">labels</span>:
+      - <span style="color:#e6db74">&#34;traefik.enable=true&#34;</span>
+
+
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik.entrypoints=http&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik.rule=Host(`traefik.example.com`)&#34;</span>
+
+      - <span style="color:#e6db74">&#34;traefik.http.middlewares.https-redirect.redirectscheme.scheme=https&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https&#34;</span>
+
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik.middlewares=https-redirect&#34;</span>
+
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.entrypoints=https&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.rule=Host(`traefik.example.com`)&#34;</span>
+
+      <span style="color:#75715e">#user password</span>
+      - <span style="color:#e6db74">&#34;traefik.http.middlewares.auth.basicauth.users=user:$$apr1$$ZCdpObME$$JUZ7NMS93R/k54WEYpek80&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.middlewares=auth&#34;</span>
+
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.tls=true&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.tls.certresolver=letsencrypt&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.tls.domains[0].main=example.com&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.tls.domains[0].sans=*.example.com&#34;</span>
+
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.service=api@internal&#34;</span>
+
+
+<span style="color:#66d9ef">networks</span>:
+  <span style="color:#66d9ef">proxy</span>:
+    <span style="color:#66d9ef">external</span>: <span style="color:#66d9ef">true</span></code></pre></div>
+</div>
+<h3 id="headline-5">
+Volúmenes
+</h3>
+<p>
+Para entender los volúmenes de mejor forma este es mi estructura de archivos para este contenedor:
+</p>
+<div class="src src-bash">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">+ docker-compose.yml
+- data
+    | - acme.json
+    | - config.yml //este no lo utilizaremos en este tutorial pero puedes crearlo para futuros usos
+    | - traefik.yml</code></pre></div>
+</div>
+<p>
+Como tal todos los volúmenes serán de tipo read-only <strong>ro</strong> menos el de acme.json debido a que traefik escribirá y leerá de este archivo para almacenar la información generada por Lego.
+</p>
+<h3 id="headline-6">
+Network
+</h3>
+<p>
+Definimos nuestra network llamada <strong>proxy</strong> en el docker-compose. No es necesario que se llame <strong>proxy</strong> puede ponerle el nombre que consideres mejor para tu proyecto
+</p>
+<div class="src src-yaml">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">traefik</span>:
+    <span style="color:#66d9ef">networks</span>:
+      - proxy</code></pre></div>
+</div>
+<p>
+Y de igual forma dentro de nuestro servicio traefik indicamos las redes a la cual podrá estar conectado nuestro traefik, en este caso solo será a <strong>proxy</strong>
+</p>
+<div class="src src-yaml">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">networks</span>:
+  - proxy</code></pre></div>
+</div>
+<p>
+Creación de nuestra red llamada <strong>proxy</strong> en nuestra shell
+</p>
+<div class="src src-bash">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker network create proxy</code></pre></div>
+</div>
+<h3 id="headline-7">
+LINODE_TOKEN
+</h3>
+<p>
+Este apartado variará dependiendo de nuestro proveedor, por lo que vale la pena consultemos en la documentación <a href="https://doc.traefik.io/traefik/https/acme/">Let&#39;s Encrypt - Traefik</a> y en prestar atención a la columna <strong>Enviroment Variables</strong> que en mi caso solo requiere la LINODE_TOKEN, y por ejemplo las de cloudflare son CF_API_EMAIL, CF_API_KEY
+</p>
+<div class="src src-yaml">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">traefik</span>:
+    <span style="color:#66d9ef">environment</span>:
+      - LINODE_TOKEN=AQUI PONDREMOS EL TOKEN QUE GENERAMOS ANTES</code></pre></div>
+</div>
+<h3 id="headline-8">
+Ports
+</h3>
+<p>
+Hacemos un mapeo de nuestros puertos 80 y 443 para que sean utilizados por los protocolos http y https respectivamente
+</p>
+<div class="src src-yaml">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">    <span style="color:#66d9ef">ports</span>:
+      - <span style="color:#e6db74">&#34;80:80&#34;</span>
+      - <span style="color:#e6db74">&#34;443:443&#34;</span></code></pre></div>
+</div>
+<h3 id="headline-9">
+Labels
+</h3>
+<h4 id="headline-10">
+traefik.enable=true
+</h4>
+<p>
+Le indicamos a traefik que este contenedor hará uso de traefik.
+</p>
+<p>
+¿Cual es el motivo de que traefik utilice traefik? esto es debido a que como tal quien hara uso de traefik es realmente el dashboard de traefik, el cual hemos activado con motivo de tener una mejor visualización de si nuestros servicios están corriendo de buena forma.
+</p>
+<h4 id="headline-11">
+traefik.http.middleware
+</h4>
+<h5 id="headline-12">
+https-redirect.redirectscheme.scheme
+</h5>
+<p>
+Le pedimos a traefik que haga un redirect de las request al esquema https
+</p>
+<h5 id="headline-13">
+sslheader.headers.customrequestheaders.X-Forwarded-Proto
+</h5>
+<p>
+CustomRequestHeaders revela una lista de opciones para aplicar a una request, en este caso agregaremos la X-Forwarded-Proto, este nos ayudará a identificar entre http y https  <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-Proto">X-Forwarded-Proto - HTTP | MDN</a>
+</p>
+<h5 id="headline-14">
+auth.basicauth.users
+</h5>
+<p>
+Traefik nos brinda mecanismos para solicitar un usuario y contraseña utilizando la api nativas de los navegadores, y este nos será útil para tener un control de acceso al dashboard de traefik,
+</p>
+<p>
+Lo siguiente es el equivalente a tener como usuario <strong>user</strong> y tener como contraseña <strong>password</strong>
+</p>
+<div class="src src-bash">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">user:$$apr1$$ZCdpObME$$JUZ7NMS93R/k54WEYpek80</code></pre></div>
+</div>
+<p>
+Para generar un sistema de usuario contraseña para traefik requerimos utilizar el programa htpasswd del proyecto apache. Una vez instalado en nuestro PC podemos generar nuestro usuario y contraseña:
+</p>
+<div class="src src-bash">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">echo <span style="color:#66d9ef">$(</span>htpasswd -nb user password<span style="color:#66d9ef">)</span> | sed -e s/<span style="color:#ae81ff">\\</span>$/<span style="color:#ae81ff">\\</span>$<span style="color:#ae81ff">\\</span>$/g</code></pre></div>
+</div>
+<p>
+sustituimos el <strong>user</strong> y <strong>password</strong> por el nombre que consideremos bueno
+</p>
+<p>
+Nota: es muy importante utilizar la sed como se muestra en el apartado anterior
+</p>
+<p>
+Es importante indicar que esta cadena es casi random su resultado, por lo que no esperes conseguir el mismo resultado que yo
+</p>
+<p>
+Ahora el resultado lo colocamos en nuestro contenedor y listo.
+</p>
+<p>
+Nota: Recomendaría considerar colocar este dato en una variable de entorno
+</p>
+<h4 id="headline-15">
+traefik.http.routers
+</h4>
+<h5 id="headline-16">
+traefik
+</h5>
+<p>
+En este caso podemos hacer referencia a nuestro propio contenedor utilizando su propio indicado en el <strong>container_name</strong> de nuestro docker-compose.
+</p>
+<h6 id="headline-17">
+entryPoints
+</h6>
+<p>
+Este lo especificamos previamente en nuestro archivo <strong>traefik.yml</strong> y como se indica sera para atender las peticiones del puerto 80
+</p>
+<h6 id="headline-18">
+rule
+</h6>
+<p>
+¿Que Host o Path atenderá este contenedor?, en este caso el dashboard sera desplegado en la pagina traefik.example.com, el cual debemos sustituir por uno que pertenezca a nuestro dominio.
+</p>
+<div class="src src-yaml">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">    <span style="color:#66d9ef">labels</span>:
+      - <span style="color:#e6db74">&#34;traefik.enable=true&#34;</span>
+
+
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik.entrypoints=http&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik.rule=Host(`traefik.example.com`)&#34;</span>
+
+      - <span style="color:#e6db74">&#34;traefik.http.middlewares.https-redirect.redirectscheme.scheme=https&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https&#34;</span>
+
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik.middlewares=https-redirect&#34;</span>
+
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.entrypoints=https&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.rule=Host(`traefik.example.com`)&#34;</span>
+
+      <span style="color:#75715e">#user password</span>
+      - <span style="color:#e6db74">&#34;traefik.http.middlewares.auth.basicauth.users=user:$$apr1$$ZCdpObME$$JUZ7NMS93R/k54WEYpek80&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.middlewares=auth&#34;</span>
+
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.tls=true&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.tls.certresolver=letsencrypt&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.tls.domains[0].main=example.com&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.tls.domains[0].sans=*.example.com&#34;</span>
+
+      - <span style="color:#e6db74">&#34;traefik.http.routers.traefik-secure.service=api@internal&#34;</span></code></pre></div>
+</div>
+<h6 id="headline-19">
+middlewares
+</h6>
+<p>
+Asignamos el middleware <strong>https-redirect</strong> que declaramos con anterioridad, este nos ayudara a redirigir las peticiones http al https
+</p>
+<h5 id="headline-20">
+traefik-secure
+</h5>
+<p>
+Con traefik podemos colocar el nombre de servicio que queramos en nuestro contenedor, no es necesario que sea el mismo que el <strong>container_name</strong> y utilizaremos esta característica para crear un nuevo servicio que administrara los entrypoints de tipo https.
+</p>
+<p>
+Algunos puntos son similares a los http por lo que omitiré su explicación
+</p>
+<h6 id="headline-21">
+middlewares
+</h6>
+<p>
+Agregamos el middleware auth a nuestro traefik seguro con motivo de que se le solicite el usuario y contraseña a los usuarios que quieran acceder al dashboard
+</p>
+<h6 id="headline-22">
+tls
+</h6>
+<p>
+Por ultimo indicamos con <strong>true</strong> que deseamos utilizar tls para esta conexión.
+</p>
+<p>
+<strong>certresolver:</strong> Es el nombre que indicamos en nuestro archivo <strong>traefik.yml</strong> en mi caso para identificarlo de mejor forma le llamé letsencrypt, pero repito puedes llamarle como gustes
+</p>
+<p>
+<strong>domains[0].main:</strong> Este sera nuestro dominio principal del cual también indicaremos los sub-dominios
+</p>
+<p>
+<strong>domains[0].sans:</strong> Los sub-dominios que deseamos incluir ssl, en mi caso deseo que todos los sub-dominios tengan ssl así que podemos usar el * como comodín
+</p>
+<h6 id="headline-23">
+service
+</h6>
+<p>
+utilizaremos el servicio api declarado en <strong>traefik.yml</strong>
+</p>
+<h5 id="headline-24">
+Puesta en marcha de traefik
+</h5>
+<p>
+Tras lo anterior ahora ya podemos arrancar nuestro docker-compose
+</p>
+<p>
+Es recomendable hacer un simple <strong>up</strong> para visualizar si traefik tiene algún mensaje de error.
+</p>
+<div class="src src-bash">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker-compose up</code></pre></div>
+</div>
+<p>
+Ahora debemos ser capaces de entrar a traefik.example.com y nuestro navegador nos indicará que el https esta activo y correctamente configurado
+</p>
+<h3 id="headline-25">
+Configuración de otros contenedores para usar traefik y asignar dominio o sub-dominio
+</h3>
+<p>
+Este ejemplo es un simple contenedor que corre una aplicación web con el puerto 80 expuesto, por lo que no entraremos en muchos detalles sobre su funcionamiento.
+</p>
+<p>
+docker-compose.yml:
+</p>
+<div class="src src-yaml">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#66d9ef">services</span>:
+  <span style="color:#66d9ef">app</span>:
+    <span style="color:#66d9ef">container_name</span>: app
+    <span style="color:#66d9ef">build</span>:
+      <span style="color:#66d9ef">dockerfile</span>: Dockerfile
+      <span style="color:#66d9ef">context</span>: .
+    <span style="color:#66d9ef">restart</span>: unless-stopped
+    <span style="color:#66d9ef">networks</span>:
+      - proxy
+    <span style="color:#66d9ef">labels</span>:
+      - <span style="color:#e6db74">&#34;traefik.enable=true&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.app.entrypoints=http&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.app.rule=Host(`subdominio.example.com`)&#34;</span>
+
+      - <span style="color:#e6db74">&#34;traefik.http.middlewares.app-https-redirect.redirectscheme.scheme=https&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.app.middlewares=app-https-redirect&#34;</span>
+
+      - <span style="color:#e6db74">&#34;traefik.http.routers.app-secure.entrypoints=https&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.app-secure.rule=Host(`subdominio.example.com`)&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.app-secure.tls=true&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.routers.app-secure.service=app&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.http.services.app.loadbalancer.server.port=80&#34;</span>
+      - <span style="color:#e6db74">&#34;traefik.docker.network=proxy&#34;</span>
+
+<span style="color:#66d9ef">networks</span>:
+  <span style="color:#66d9ef">proxy</span>:
+    <span style="color:#66d9ef">external</span>: <span style="color:#66d9ef">true</span></code></pre></div>
+</div>
+<p>
+Como notaremos guarda mucha similitud al la configuración que le dimos a al dashboard de traefik. Quizás lo mas llamativo es el tema de que se le tiene que indicar el puerto en el que esta corriendo nuestro contenedor para que funcione la versión https, pero en el resto es lo mismo que vimos anteriormente
+</p>
+<p>
+Ahora podemos correr nuestro contenedor en el fondo, debido a que si existe un error en la configuración de los labels de traefik, este no nos indicará nada, pero quien si nos puede indicar es el dashboard de traefik, o en ultima instancia podemos apagar traefik y validar los logs al volver a encender (Aunque lo mas óptimo sea visualizar los logs sin apagar el contenedor de traefik).
+</p>
+<div class="src src-bash">
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">docker-compose up -d</code></pre></div>
+</div>
+<p>
+Con esto ya nuestra nueva aplicación que corre en <strong>subdominio.example.com</strong> tendrá un certificado valido.
+</p>
+<h3 id="headline-26">
+Referencias que utilice para hacer este articulo:
+</h3>
+<p>
+En gran medida esta configuración proviene de este vídeo:
+<a href="https://www.youtube.com/watch?v=liV3c9m_OX8">Put Wildcard Certificates and SSL on EVERYTHING - Traefik Tutorial - YouTube</a>
+</p>
+<p>
+Algunas dudas sobre la configuración de linode vienen de este link:
+<a href="https://lefthandbrain.com/lets-encrypt-certificates-with-traefik-on-linode/">Lets Encrypt Certificates with Traefik on Linode</a>
+</p>
+<p>
+Y por ultimo la propia documentación de traefik
+<a href="https://doc.traefik.io/traefik/https/acme/">Let&#39;s Encrypt - Traefik</a>
+</p>
+
+		</section>
+
+		<div class="post-tags">
+			
+			
+			
+		</div>
+	</article>
+</main>
+<footer>
+  <div style="display:flex"></div>
+  <div class="footer-info">
+    2022  <a
+      href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+  </div>
+</footer>
+
+
+</div>
+    </body>
+</html>

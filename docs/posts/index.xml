@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>es</language>
-    <lastBuildDate>Sun, 27 Mar 2022 17:03:20 -0600</lastBuildDate>
+    <lastBuildDate>Sun, 03 Apr 2022 00:00:20 -0600</lastBuildDate>
     
 	<atom:link href="https://blog.enne.fun/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>&#34;Configurar Let&#39;s Encrypt en traefik&#34;</title>
+      <link>https://blog.enne.fun/posts/configurar-letsencrypt-en-traefik/</link>
+      <pubDate>Sun, 03 Apr 2022 00:00:20 -0600</pubDate>
+      
+      <guid>https://blog.enne.fun/posts/configurar-letsencrypt-en-traefik/</guid>
+      <description>Resumen   En el siguiente articulo veremos como configurar SSL en traefik usando Let&amp;#39;s Encrypt que aunque es fácil este requiere un par de pasos para su puesta en marcha.  Debido a que es una configuración que requiere varios pasos es posible que cometiera algun error, de ser el caso agradeceria me lo reportaran a mi twitter https://twitter.com/dannywolfmx/ Configuración de traefik.yml  api: #Habilitar el dashboard de traefik dashboard: true debug: true entryPoints: #Los entry points para http (80) y https (443) http: address: &amp;#34;:80&amp;#34; https: address: &amp;#34;:443&amp;#34; serversTransport: insecureSkipVerify: true providers: docker: endpoint: &amp;#34;unix:///var/run/docker.</description>
+    </item>
     
     <item>
       <title>&#34;Configurar doom-emacs para tranpilar archivos ORG a Markdown y usarlo en Hugo&#34;</title>
