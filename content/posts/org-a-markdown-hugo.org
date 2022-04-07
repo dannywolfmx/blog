@@ -1,8 +1,13 @@
-#+title: "Configurar doom-emacs para tranpilar archivos ORG a Markdown y usarlo en Hugo"
+#+title: Configurar doom-emacs para tranpilar archivos ORG a Markdown y usarlo en Hugo
 #+date: 2022-03-27T17:03:20-06:00
 #+author: "Daniel Menchaca Luna"
 #+draft: false
 #+hugo_base_dir: ../..
+
+*Actualización:* En el presente articulo se tenia entendido que Hugo no soportaba ORG de forma nativa, pero tras trabajar con este framework por mas tiempo noté que si que soporta ORG de forma nativa, por lo que este artículo puede quedar considerado como obsoleto.
+
+
+* Introducción
 
 Hugo por su simpleza y rapidez resulta una opción interesante cuando deseamos tener un blog simple, pero este de forma nativa no soporta ORG, y requerimos usar un parser para esta tarea.
 

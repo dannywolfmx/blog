@@ -3,12 +3,12 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://blog.enne.fun/posts/configurar-letsencrypt-en-traefik/</loc>
+    <loc>https://blog.enne.fun/</loc>
     <lastmod>2022-04-03T00:00:20-06:00</lastmod>
   </url>
   
   <url>
-    <loc>https://blog.enne.fun/</loc>
+    <loc>https://blog.enne.fun/posts/configurar-letsencrypt-en-traefik/</loc>
     <lastmod>2022-04-03T00:00:20-06:00</lastmod>
   </url>
   

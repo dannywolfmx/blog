@@ -1,4 +1,4 @@
-#+title: "Configurar Let's Encrypt en traefik"
+#+title: Configurar Let's Encrypt en traefik
 #+date: 2022-04-03T00:00:20-06:00
 #+author: "Daniel Menchaca Luna"
 #+draft: false
