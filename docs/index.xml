@@ -6,10 +6,19 @@
     <description>Recent content on Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>es</language>
-    <lastBuildDate>Sun, 03 Apr 2022 00:00:20 -0600</lastBuildDate>
+    <lastBuildDate>Thu, 14 Apr 2022 00:00:20 -0600</lastBuildDate>
     
 	<atom:link href="https://blog.enne.fun/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Comandos git</title>
+      <link>https://blog.enne.fun/posts/comandos-git/</link>
+      <pubDate>Thu, 14 Apr 2022 00:00:20 -0600</pubDate>
+      
+      <guid>https://blog.enne.fun/posts/comandos-git/</guid>
+      <description>   Nota: esta página estará en constante actualización.  Crear ramas  git branch name_new_branch git checkout name_new_branch # o puedes usar el comando corto git checkout -b name_new_branch  Cambiar de rama  git checkout name_branch  </description>
+    </item>
     
     <item>
       <title>Configurar Let&#39;s Encrypt en traefik</title>
