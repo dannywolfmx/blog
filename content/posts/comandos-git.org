@@ -1,0 +1,27 @@
+#+title: Comandos git
+#+date: 2022-04-14T00:00:20-06:00
+#+author: "Daniel Menchaca Luna"
+#+draft: false
+#+hugo_base_dir: ../..
+
+#+begin_quote
+Nota: esta página estará en constante actualización.
+#+end_quote
+
+
+** Crear ramas
+
+#+begin_src bash
+git branch name_new_branch
+git checkout name_new_branch
+
+# o puedes usar el comando corto
+
+git checkout -b name_new_branch
+#+end_src
+
+** Cambiar de rama
+
+#+begin_src bash
+git checkout name_branch
+#+end_src
