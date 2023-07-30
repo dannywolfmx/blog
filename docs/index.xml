@@ -2,27 +2,38 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Blog</title>
-    <link>https://blog.enne.fun/</link>
+    <link>https://dannywolfmx.github.io/blog/</link>
     <description>Recent content on Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>es</language>
-    <lastBuildDate>Thu, 14 Apr 2022 00:00:20 -0600</lastBuildDate><atom:link href="https://blog.enne.fun/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 30 Jul 2023 00:27:18 -0600</lastBuildDate><atom:link href="https://dannywolfmx.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Retomando El Blog</title>
+      <link>https://dannywolfmx.github.io/blog/posts/retomando-el-blog/</link>
+      <pubDate>Sun, 30 Jul 2023 00:27:18 -0600</pubDate>
+      
+      <guid>https://dannywolfmx.github.io/blog/posts/retomando-el-blog/</guid>
+      <description>Ha pasado un tiempo desde que escribí una entrada a esté blog, y me gustaria retomarlo, por lo que el primer paso para hacerlo es empezar con esta entrada.
+¿Qué he estado haciendo? Por lo que veo mi última entrada está relacinada a un proyecto que tuve el año pasado, por lo que quizás lo mejor sea empezar desde el día de hoy hasta ese día.
+Sistema de cotizaciones Link al proyecto que a la fecha de este blog aun no lo tendré publico: Cotizador</description>
+    </item>
+    
     <item>
       <title>Comandos git</title>
-      <link>https://blog.enne.fun/posts/comandos-git/</link>
+      <link>https://dannywolfmx.github.io/blog/posts/comandos-git/</link>
       <pubDate>Thu, 14 Apr 2022 00:00:20 -0600</pubDate>
       
-      <guid>https://blog.enne.fun/posts/comandos-git/</guid>
+      <guid>https://dannywolfmx.github.io/blog/posts/comandos-git/</guid>
       <description>  Nota: esta página estará en constante actualización.
  Crear ramas  git branch name_new_branch git checkout name_new_branch # o puedes usar el comando corto git checkout -b name_new_branch    Cambiar de rama  git checkout name_branch    </description>
     </item>
     
     <item>
       <title>Configurar Let&#39;s Encrypt en traefik</title>
-      <link>https://blog.enne.fun/posts/configurar-letsencrypt-en-traefik/</link>
+      <link>https://dannywolfmx.github.io/blog/posts/configurar-letsencrypt-en-traefik/</link>
       <pubDate>Sun, 03 Apr 2022 00:00:20 -0600</pubDate>
       
-      <guid>https://blog.enne.fun/posts/configurar-letsencrypt-en-traefik/</guid>
+      <guid>https://dannywolfmx.github.io/blog/posts/configurar-letsencrypt-en-traefik/</guid>
       <description>Resumen   En el siguiente articulo veremos como configurar SSL en traefik usando Let&amp;#39;s Encrypt que aunque es fácil este requiere un par de pasos para su puesta en marcha.
  Debido a que es una configuración que requiere varios pasos es posible que cometiera algun error, de ser el caso agradeceria me lo reportaran a mi twitter https://twitter.com/dannywolfmx/
   Configuración de traefik.yml  api: #Habilitar el dashboard de traefik dashboard: true debug: true entryPoints: #Los entry points para http (80) y https (443) http: address: &amp;#34;:80&amp;#34; https: address: &amp;#34;:443&amp;#34; serversTransport: insecureSkipVerify: true providers: docker: endpoint: &amp;#34;unix:///var/run/docker.</description>
@@ -30,10 +41,10 @@
     
     <item>
       <title>Configurar doom-emacs para tranpilar archivos ORG a Markdown y usarlo en Hugo</title>
-      <link>https://blog.enne.fun/posts/org-a-markdown-hugo/</link>
+      <link>https://dannywolfmx.github.io/blog/posts/org-a-markdown-hugo/</link>
       <pubDate>Sun, 27 Mar 2022 17:03:20 -0600</pubDate>
       
-      <guid>https://blog.enne.fun/posts/org-a-markdown-hugo/</guid>
+      <guid>https://dannywolfmx.github.io/blog/posts/org-a-markdown-hugo/</guid>
       <description>Actualización: En el presente articulo se tenia entendido que Hugo no soportaba ORG de forma nativa, pero tras trabajar con este framework por mas tiempo noté que si que soporta ORG de forma nativa, por lo que este artículo puede quedar considerado como obsoleto.
 Introducción   Hugo por su simpleza y rapidez resulta una opción interesante cuando deseamos tener un blog simple, pero este de forma nativa no soporta ORG, y requerimos usar un parser para esta tarea.</description>
     </item>

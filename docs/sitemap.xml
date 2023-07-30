@@ -2,23 +2,26 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://blog.enne.fun/</loc>
+    <loc>https://dannywolfmx.github.io/blog/</loc>
+    <lastmod>2023-07-30T00:27:18-06:00</lastmod>
+  </url><url>
+    <loc>https://dannywolfmx.github.io/blog/posts/</loc>
+    <lastmod>2023-07-30T00:27:18-06:00</lastmod>
+  </url><url>
+    <loc>https://dannywolfmx.github.io/blog/posts/retomando-el-blog/</loc>
+    <lastmod>2023-07-30T00:27:18-06:00</lastmod>
+  </url><url>
+    <loc>https://dannywolfmx.github.io/blog/posts/comandos-git/</loc>
     <lastmod>2022-04-14T00:00:20-06:00</lastmod>
   </url><url>
-    <loc>https://blog.enne.fun/posts/comandos-git/</loc>
-    <lastmod>2022-04-14T00:00:20-06:00</lastmod>
-  </url><url>
-    <loc>https://blog.enne.fun/posts/</loc>
-    <lastmod>2022-04-14T00:00:20-06:00</lastmod>
-  </url><url>
-    <loc>https://blog.enne.fun/posts/configurar-letsencrypt-en-traefik/</loc>
+    <loc>https://dannywolfmx.github.io/blog/posts/configurar-letsencrypt-en-traefik/</loc>
     <lastmod>2022-04-03T00:00:20-06:00</lastmod>
   </url><url>
-    <loc>https://blog.enne.fun/posts/org-a-markdown-hugo/</loc>
+    <loc>https://dannywolfmx.github.io/blog/posts/org-a-markdown-hugo/</loc>
     <lastmod>2022-03-27T17:03:20-06:00</lastmod>
   </url><url>
-    <loc>https://blog.enne.fun/categories/</loc>
+    <loc>https://dannywolfmx.github.io/blog/categories/</loc>
   </url><url>
-    <loc>https://blog.enne.fun/tags/</loc>
+    <loc>https://dannywolfmx.github.io/blog/tags/</loc>
   </url>
 </urlset>
