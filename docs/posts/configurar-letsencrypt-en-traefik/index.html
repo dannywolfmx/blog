@@ -20,13 +20,16 @@
 <meta name="twitter:description" content="Resumen   En el siguiente articulo veremos como configurar SSL en traefik usando Let&#39;s Encrypt que aunque es fácil este requiere un par de pasos para su puesta en marcha.
  Debido a que es una configuración que requiere varios pasos es posible que cometiera algun error, de ser el caso agradeceria me lo reportaran a mi twitter https://twitter.com/dannywolfmx/
   Configuración de traefik.yml  api: #Habilitar el dashboard de traefik dashboard: true debug: true entryPoints: #Los entry points para http (80) y https (443) http: address: &#34;:80&#34; https: address: &#34;:443&#34; serversTransport: insecureSkipVerify: true providers: docker: endpoint: &#34;unix:///var/run/docker."/>
-
+<script src="https://dannywolfmx.github.io/blog/js/feather.min.js"></script>
+	
 	
         <link href="https://dannywolfmx.github.io/blog/css/fonts.2c2227b81b1970a03e760aa2e6121cd01f87c88586803cbb282aa224720a765f.css" rel="stylesheet">
 	
 
 	
 	<link rel="stylesheet" type="text/css" media="screen" href="https://dannywolfmx.github.io/blog/css/main.ac08a4c9714baa859217f92f051deb58df2938ec352b506df655005dcaf98cc0.css" />
+		<link id="darkModeStyle" rel="stylesheet" type="text/css" href="https://dannywolfmx.github.io/blog/css/dark.726cd11ca6eb7c4f7d48eb420354f814e5c1b94281aaf8fd0511c1319f7f78a4.css"  disabled />
+	
 
 	
 	
@@ -43,6 +46,8 @@
 	</div>
 	<nav>
 		
+		| <span id="dark-mode-toggle" onclick="toggleTheme()"></span>
+		<script src="https://dannywolfmx.github.io/blog/js/themetoggle.js"></script>
 		
 	</nav>
 </header>
