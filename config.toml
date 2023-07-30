@@ -3,3 +3,6 @@ languageCode = "es"
 title = "Blog"
 theme = "archie"
 publishDir = "docs"
+
+[params]
+    mode="toggle"
