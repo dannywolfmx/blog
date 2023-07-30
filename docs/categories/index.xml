@@ -5,10 +5,6 @@
     <link>https://blog.enne.fun/categories/</link>
     <description>Recent content in Categories on Blog</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>es</language>
-    
-	<atom:link href="https://blog.enne.fun/categories/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <language>es</language><atom:link href="https://blog.enne.fun/categories/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
